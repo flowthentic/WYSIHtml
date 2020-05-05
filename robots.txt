@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /lib/
+Disallow: /opt/
+Disallow: /usr/
+Disallow: /etc/

@@ -1,0 +1,18 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteBase /
+
+#pass to tmp.php if /tmp folder is requested
+RewriteRule ^tmp/([\w/_\.\-\ ]+)$ /lib/tmp.php?path=$1 [L]
+
+#Redirect for search engines
+RewriteRule ^robots.txt etc/robots.txt
+
+#match only existing folders
+RewriteCond %{SCRIPT_FILENAME} -d
+#consider only folders at least 4 characters long for ls.php
+RewriteRule ^([\w_\-]{4,}[\w/_\-]*)/$ lib/ls.php?path=$1/ [QSD]
+
+#comment the following if you want to use index.php, if only domain is entered
+RewriteRule ^$ lib/ls.php
+

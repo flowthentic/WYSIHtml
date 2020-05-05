@@ -1,0 +1,56 @@
+<form id="projekt" onmousedown="resetTimer()" method="POST" enctype="multipart/form-data">
+<?php
+  require_once("$_SERVER[DOCUMENT_ROOT]/opt/simple_html_dom.php");
+  $parts = str_get_html("<div>$this->cat</div>")->find('article');
+  echo $parts[0]->outertext;
+?>
+  <img src="">
+  <nav>
+    <ul>
+      <li v-for="image in images">
+        <img onclick="setProjectImg(this)" v-bind:src="tmpImg(dir, image.path)">
+        <label v-if="editing !== ''" class="deletable"><input type="checkbox" name="delete[]" v-bind:value="image.path">zmazať</label>
+      </li>
+      <li v-if="editing !== ''">
+        <input type="file" name="files[]" multiple />
+      </li>
+    </ul>
+  </nav>
+  
+<?php echo $parts[1]->outertext; ?>
+  
+  <script>
+  var json = <?php echo $this ?> ;
+  if (json.editing === undefined) json.editing = '';
+  var projekt, rerootNeeded = false;
+  var imgCallback;
+  
+  if (this instanceof HTMLElement)
+    projekt = this;
+  else projekt = document.querySelector('#projekt');
+  var projVue = new Vue({
+    el: projekt.querySelector('ul'),
+    data: json,
+    methods: {
+      tmpImg: function(dir, path) {
+        return "/tmp/projekt/"+dir+'/'+path;
+      }
+    }
+  });
+  var projli = document.getElementById(json.dir);
+  var previousProjs = projli.parentElement.getElementsByClassName("selected");
+  for (p=0; p < previousProjs.length; previousProjs[p++].setAttribute('class', ''));
+  projli.setAttribute('class', 'selected');
+  projli.parentNode.scrollTop = projli.offsetTop - (projli.parentNode.offsetHeight / 2);
+  nextProject = projli.nextElementSibling.querySelector('a') || document.querySelector('ol a');
+  if (nextProject.onmouseover) nextProject.onmouseover();
+  
+  var mainImage = projekt.querySelector('img');
+  var firstImage = projekt.querySelector('ul img');
+  psa = new PerfectScrollbar(projekt, { suppressScrollX: true });
+  psi = new PerfectScrollbar(projekt.getElementsByTagName('ul')[0]);
+  if (this instanceof HTMLElement)
+    this.onloadend = () => setProjectImg(firstImage, mainImage, recalculateRatio);
+  else setProjectImg(firstImage, mainImage, recalculateRatio);
+  </script>
+</form>

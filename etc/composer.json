@@ -1,0 +1,12 @@
+{
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8"
+    },
+    "config": {
+        "vendor-dir": "../lib",
+        "cache-dir": "../tmp",
+        "bin-dir": "../usr/bin"
+    }
+}
